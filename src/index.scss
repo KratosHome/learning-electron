@@ -1,0 +1,118 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --hue: 223;
+  --index: calc(1vw + 1vh);
+  --margin-glock-top: calc(var(--index) * 0.25);
+  --background: white;
+  --background-block: #bbbbbb;
+  --background-button: rgb(241, 0, 56);
+  --background-button-hover: #bb0606;
+  --color-text: rgb(20, 20, 20);
+  --color-text-block: white;
+  --color-text-active: rgb(201, 201, 218);
+  --hover-text: #4cceac;
+  --hover-text-blocl: #4cceac;
+  --border: rgb(83, 83, 121);
+  --border-block: rgb(74, 74, 106);
+  --color-svg: rgb(74, 74, 106);
+  --color-svg-button: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] {
+  --background: rgb(24, 24, 38);
+  --background-block: rgb(33, 33, 52);
+  --background-button: #d20404;
+  --background-button-hover: #bb0606;
+  --color-text: rgb(201, 201, 218);
+  --color-text-block: rgb(225, 217, 217);
+  --color-text-active: rgb(238, 86, 86);
+  --hover-text: rgb(231, 181, 181);
+  --hover-text-blocl: #4cceac;
+  --bprder: rgb(50, 50, 77);
+  --border-block: rgb(74, 74, 106);
+  --color-svg: rgb(201, 201, 218);
+  --color-svg-button: rgb(239, 231, 231);
+}
+
+
+body {
+  background-color: var(--background);
+  color: var(--color);
+  font-size: calc(var(--index) * .65);
+  line-height: 1.75;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color 0.4s ease-in-out;
+
+  &:hover {
+    transition: background-color 0.4s ease-in-out;
+    color: var(--hover-text);
+    cursor: pointer;
+  }
+}
+
+
+button {
+  border: none;
+  background-color: transparent;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+
+@media (max-width: 999px) {
+  body {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+.container-app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+.resize {
+  background-color: red;
+  border: 1px solid var(--background);
+  border-radius: 2px;
+  transition: 300ms;
+  font-size: calc(var(--index) * .75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.resize-vertical {
+  width: 4px;
+  cursor: col-resize;
+
+  div {
+    transform: rotate(90deg);
+    margin-right: calc(var(--index) * -.4);
+  }
+
+}
