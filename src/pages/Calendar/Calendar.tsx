@@ -3,10 +3,16 @@ import {useTranslation} from 'react-i18next';
 import "./Calendar.scss"
 import {GoToToday} from "../../components/calendar/GoToToday";
 import {ChangeMonth, DayItem, TodoItem} from "../../components/calendar";
-
+import {useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { addTodo, updateTodo } from '../../store/todoSlice';
 const Calendar: React.FC = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const {i18n} = useTranslation();
+
+    const todos = useSelector((state: RootState) => state.todo.todos);
+    const dispatch = useDispatch();
+
 
     const daysInMonth = (date: Date) => {
         const month = date.getMonth();
@@ -34,14 +40,10 @@ const Calendar: React.FC = () => {
         return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
     };
 
-    const [todos, setTodos] = useState([
-        {id: 1, date: new Date(2023, 2, 15), text: 'Example todo 1'},
-        {id: 2, date: new Date(2023, 2, 17), text: 'Example todo 2'},
-    ]);
 
     const onAddTodo = (date: any, text: any) => {
-        const newTodo = {id: Date.now(), date, text};
-        setTodos([...todos, newTodo]);
+        const newTodo = { id: Date.now(), date, text };
+        dispatch(addTodo(newTodo));
     };
 
 
@@ -56,13 +58,11 @@ const Calendar: React.FC = () => {
     const handleDrop = (e: React.DragEvent<HTMLDivElement>, date: Date) => {
         e.preventDefault();
         const todoId = parseInt(e.dataTransfer.getData('todoId'));
-        const newTodos = todos.map((todo) => {
-            if (todo.id === todoId) {
-                return {...todo, date: new Date(date)};
-            }
-            return todo;
-        });
-        setTodos(newTodos);
+        const todoToUpdate = todos.find((todo) => todo.id === todoId);
+
+        if (todoToUpdate) {
+            dispatch(updateTodo({ ...todoToUpdate, date: new Date(date) }));
+        }
     };
 
 

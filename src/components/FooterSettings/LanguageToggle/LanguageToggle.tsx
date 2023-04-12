@@ -5,7 +5,7 @@ type Language = 'en' | 'ua';
 
 const LanguageToggle = () => {
 
-    const {t, i18n} = useTranslation();
+    const { i18n} = useTranslation();
 
     const changeLanguage = (language: Language) => {
         i18n.changeLanguage(language)
@@ -13,7 +13,6 @@ const LanguageToggle = () => {
                 console.error('Не вдалося змінити мову:', error)
             });
     };
-    console.log(i18n.language)
     return (
         <>
             {i18n.language === "en" ?
