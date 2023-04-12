@@ -1,4 +1,7 @@
 {
   "welcome": "welcome",
-  "today": "today"
+  "today": "today",
+  "calendar": "calendar",
+  "todo": "to do",
+  "upcoming": "upcoming"
 }

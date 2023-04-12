@@ -9,14 +9,16 @@ const LanguageToggle = () => {
 
     const changeLanguage = (language: Language) => {
         i18n.changeLanguage(language)
-        .catch((error) => {console.error('Не вдалося змінити мову:', error)});
+            .catch((error) => {
+                console.error('Не вдалося змінити мову:', error)
+            });
     };
-
+    console.log(i18n.language)
     return (
         <>
-            <h1>{t('welcome')}</h1>
-            <button onClick={() => changeLanguage('en')}>English</button>
-            <button onClick={() => changeLanguage('ua')}>Українська</button>
+            {i18n.language === "en" ?
+                <button onClick={() => changeLanguage('ua')}>ua</button> :
+                <button onClick={() => changeLanguage('en')}>en</button>}
         </>
     );
 };

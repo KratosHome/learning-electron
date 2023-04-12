@@ -1,0 +1,21 @@
+.seating {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  svg {
+    width: calc(var(--index) * .5);
+    height: calc(var(--index) * .5);
+
+    path {
+      fill: red;
+    }
+
+    &:hover {
+      path {
+        fill: blue;
+      }
+    }
+  }
+}
