@@ -10,9 +10,11 @@ import {
 } from "react-router-dom";
 import Calendar from "./pages/Calendar/Calendar";
 import Inbox from "./pages/inbox/inbox";
+import { store } from './store/store'
+import { Provider } from 'react-redux'
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 const router = createBrowserRouter([
@@ -33,9 +35,11 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  <React.StrictMode>
-      <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <RouterProvider router={router}/>
+        </Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

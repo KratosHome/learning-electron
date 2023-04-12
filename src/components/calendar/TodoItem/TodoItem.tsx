@@ -1,12 +1,17 @@
 import React, {FC} from 'react';
 
-type TodoItem = {
-    todo: any
-    handleDragStart: any
+interface Todo {
+    id: number;
+    date: Date;
+    text: string;
 }
 
+interface TodoItemProps {
+    todo: Todo;
+    handleDragStart: (e: React.DragEvent<HTMLDivElement>, todoId: number) => void;
+}
 
-export const TodoItem: FC<TodoItem> = ({todo, handleDragStart}) => (
+export const TodoItem: FC<TodoItemProps> = ({todo, handleDragStart}) => (
     <div
         key={todo.id}
         draggable

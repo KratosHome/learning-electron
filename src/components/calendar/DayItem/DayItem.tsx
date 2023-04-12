@@ -1,12 +1,12 @@
 // src/components/calendar/Day.tsx
 import React, { FC } from 'react';
 
-type DayItemType ={
-    day: any,
-    isToday: any
-    handleDragOver: any
-    handleDrop: any
-    children: any
+interface DayItemType {
+    day: Date;
+    isToday: boolean;
+    handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
+    handleDrop: (e: React.DragEvent<HTMLDivElement>, date: Date) => void;
+    children: React.ReactNode;
 }
 
 export const DayItem: FC<DayItemType> = ({ day, isToday, handleDragOver, handleDrop, children }) => (

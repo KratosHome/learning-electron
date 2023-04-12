@@ -1,6 +1,5 @@
 .container-calendar {
-  display: flex;
-  flex-direction: column;
+
   .info-calendar {
     display: flex;
 
@@ -19,10 +18,10 @@
     div {
       display: flex;
       justify-content: center;
-      min-height: calc(var(--index) * 2);
+      min-height: calc(var(--index) * 5);
       min-width: calc(var(--index) * 2);
-      max-width: calc(var(--index) * 8);
-      max-height: calc(var(--index) * 8);
+      max-width: calc(var(--index) * 19);
+      max-height: calc(var(--index) * 18);
       border-radius: 4px;
       cursor: pointer;
       background-color: red;
