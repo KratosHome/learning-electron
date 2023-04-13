@@ -1,5 +1,5 @@
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const isDev = require('electron-is-dev');
 const Store = require('electron-store');
 const store = new Store();
@@ -15,6 +15,15 @@ function createWindow() {
         },
     });
 
+
+    ipcMain.handle('get-value', (event, key) => {
+        return store.get(key);
+    });
+
+    ipcMain.handle('set-value', (event, key, value) => {
+        store.set(key, value);
+    });
+
     // and load the index.html of the app.
     win.loadURL(
         isDev
@@ -23,8 +32,9 @@ function createWindow() {
     );
     // Open the DevTools.
     if (isDev) {
-        win.webContents.openDevTools({ mode: 'detach' });
+        win.webContents.openDevTools({mode: 'detach'});
     }
+
 }
 
 app.whenReady().then(createWindow);
@@ -41,10 +51,3 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.handle('get-value', (event, key) => {
-    return store.get(key);
-});
-
-ipcMain.handle('set-value', (event, key, value) => {
-    store.set(key, value);
-});
