@@ -1,13 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
 import todoSlice from './todoSlice';
+import { Middleware } from '@reduxjs/toolkit';
+
+const electronStoreMiddleware: Middleware = (storeApi) => (next) => async (action) => {
+    const result = next(action);
+    const state = storeApi.getState();
+    await window.storeAPI.setValue('todos', state.todo.todos);
+    return result;
+};
 
 export const store = configureStore({
     reducer: {
-        todo: todoSlice
+        todo: todoSlice,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(electronStoreMiddleware),
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+
+// комбайн редюсер, чому не кереатеасінксанк
+
+
+// рефакторінг

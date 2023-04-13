@@ -1,10 +1,27 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import Resize from './components/Resize/Resize';
 import PageList from './components/PageList/PageList';
 import {Outlet} from 'react-router-dom';
 import FooterSettings from './components/FooterSettings/FooterSettings';
+import { useDispatch } from 'react-redux';
+import { initTodos } from './store/todoSlice';
 
 function App() {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        async function fetchTodos() {
+            const todos = await window.storeAPI.getValue('todos');
+            if (todos) {
+                dispatch(initTodos(todos));
+            }
+        }
+        fetchTodos();
+    }, [dispatch]);
+
+
+
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const minWidthPane1 = 100;
     const minWidthPane2 = 500;

@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Calendar from "./pages/Calendar/Calendar";
 import Inbox from "./pages/inbox/inbox";
-import { store } from './store/store'
+import {store} from './store/store';
 import { Provider } from 'react-redux'
 
 const root = ReactDOM.createRoot(
