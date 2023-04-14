@@ -1,5 +1,7 @@
+
 declare global {
     interface Window {
+        electron: any;
         versions: {
             node: () => string;
             chrome: () => string;

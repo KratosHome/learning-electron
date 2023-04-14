@@ -1,0 +1,58 @@
+.demo-wrapper {
+  .rdw-editor-toolbar {
+    padding: 6px 5px 0;
+    border-radius: 2px;
+    border: 1px solid #F1F1F1;
+    display: flex;
+    justify-content: flex-start;
+    background: white;
+    flex-wrap: wrap;
+    font-size: 15px;
+    margin-bottom: 5px;
+    user-select: none;
+
+    .rdw-inline-wrapper,
+    .rdw-block-wrapper,
+    .rdw-fontsize-wrapper,
+    .rdw-fontfamily-wrapper,
+    .rdw-list-wrapper,
+    .rdw-text-align-wrapper,
+    .rdw-colorpicker-wrapper,
+    .rdw-link-wrapper,
+    .rdw-embedded-wrapper,
+    .rdw-emoji-wrapper,
+    .rdw-image-wrapper,
+    .rdw-remove-wrapper,
+    .rdw-history-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+
+      .rdw-dropdown-selectedtext {
+        display: flex;
+        position: relative;
+        height: 100%;
+        align-items: center;
+        padding: 0 5px;
+
+        .rdw-dropdown-carettoopen {
+          height: 0px;
+          width: 0px;
+          position: absolute;
+          top: 35%;
+          right: 10%;
+          border-top: 6px solid black;
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+        }
+      }
+    }
+
+  }
+
+  .demo-editor {
+    background-color: red;
+  }
+
+}

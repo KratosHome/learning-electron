@@ -3,8 +3,8 @@ import Resize from './components/Resize/Resize';
 import PageList from './components/PageList/PageList';
 import {Outlet} from 'react-router-dom';
 import FooterSettings from './components/FooterSettings/FooterSettings';
-import { useDispatch } from 'react-redux';
-import { initTodos } from './store/todoSlice';
+import {useDispatch} from 'react-redux';
+import {initTodos} from './store/todoSlice';
 
 function App() {
 
@@ -17,9 +17,9 @@ function App() {
                 dispatch(initTodos(todos));
             }
         }
+
         fetchTodos();
     }, [dispatch]);
-
 
 
     const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -37,12 +37,36 @@ function App() {
             <Resize sectionRef={sectionRef} minWidthPane2={minWidthPane2}/>
             <div
                 className="right-container"
-                style={{ minWidth: `${minWidthPane2}px`, maxWidth: `${maxWidthPane2}px` }}
+                style={{minWidth: `${minWidthPane2}px`, maxWidth: `${maxWidthPane2}px`}}
             >
-                <Outlet />
+                <Outlet/>
             </div>
         </div>
     );
 }
 
 export default App;
+
+/*
+
+    const [data, setData] = useState('');
+
+    useEffect(() => {
+        async function fetchData() {
+            const storedData = await window.storeAPI.getValue('myData');
+            const test = await window.storeAPI
+            console.log(test)
+            setData(storedData || '');
+        }
+
+        fetchData();
+
+
+    }, []);
+
+    const saveData = async () => {
+        await window.storeAPI.setValue('myData', data);
+    };
+
+
+ */
