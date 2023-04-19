@@ -1,8 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, ThunkMiddleware } from '@reduxjs/toolkit';
 import todoSlice from './todoSlice';
-import { Middleware } from '@reduxjs/toolkit';
 
-const electronStoreMiddleware: Middleware = (storeApi) => (next) => async (action) => {
+const electronStoreMiddleware: ThunkMiddleware = (storeApi) => (next) => async (action) => {
     const result = next(action);
     const state = storeApi.getState();
     await window.storeAPI.setValue('todos', state.todo.todos);

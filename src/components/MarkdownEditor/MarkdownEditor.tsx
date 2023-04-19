@@ -14,6 +14,7 @@ export const MarkdownEditor = () => {
         setEditorState(newEditorState);
     };
 
+/*
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             const message = event.data;
@@ -55,8 +56,7 @@ export const MarkdownEditor = () => {
         };
     }, [editorState, filePath]);
 
-    const [files, setFiles] = useState([]);
-    const getFiles = async () => {
+        const getFiles = async () => {
         const filesList = await window.electron.invoke("get-files");
         setFiles(filesList);
     };
@@ -64,6 +64,10 @@ export const MarkdownEditor = () => {
     useEffect(() => {
         getFiles();
     }, []);
+ */
+
+    const [files, setFiles] = useState([]);
+
 
     const createFile = async () => {
         const newFilePath = await window.electron.invoke("create-file");
