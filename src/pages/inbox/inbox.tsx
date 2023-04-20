@@ -4,6 +4,7 @@ interface Item {
     name: string;
     path: string;
     isDirectory: boolean;
+    children?: Item[];
 }
 
 const Inbox = () => {
@@ -11,16 +12,25 @@ const Inbox = () => {
     const [currentFolderPath, setCurrentFolderPath] = useState<string | null>(null);
     const [folderName, setFolderName] = useState('');
     const [previousFolderPaths, setPreviousFolderPaths] = useState<(string | null)[]>([]);
+    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+
+    async function fetchItems(dirPath: string): Promise<Item[]> {
+        const filesAndFolders = await window.electron.invoke('get-files-and-folders', dirPath);
+        const items = await Promise.all(
+            filesAndFolders.map(async (item: Item) => {
+                if (item.isDirectory) {
+                    item.children = await fetchItems(item.path);
+                }
+                return item;
+            })
+        );
+        return items;
+    }
 
     useEffect(() => {
         if (!currentFolderPath) return;
 
-        async function fetchItems() {
-            const items = await window.electron.invoke('get-files-and-folders', currentFolderPath);
-            setItems(items);
-        }
-
-        fetchItems();
+        fetchItems(currentFolderPath).then(setItems);
     }, [currentFolderPath]);
 
     const generateFolderName = (baseName: string) => {
@@ -65,6 +75,35 @@ const Inbox = () => {
         }
     };
 
+    const toggleFolder = (folderPath: string) => {
+        const newExpandedFolders = new Set(expandedFolders);
+        if (newExpandedFolders.has(folderPath)) {
+            newExpandedFolders.delete(folderPath);
+        } else {
+            newExpandedFolders.add(folderPath);
+        }
+        setExpandedFolders(newExpandedFolders);
+    };
+
+    const renderItems = (items: Item[], level = 0) => {
+        return items.map((item) => (
+            <div key={item.path}>
+                <div
+                    style={{ paddingLeft: `${level * 16}px` }}
+                    onClick={() => {
+                        if (item.isDirectory) {
+                            toggleFolder(item.path);
+                        }
+                    }}
+                >
+                    {item.name}
+                </div>
+                {item.isDirectory && expandedFolders.has(item.path) && item.children && renderItems(item.children, level + 1)}
+            </div>
+        ));
+    };
+
+
     return (
         <div>
             <button onClick={openFolderDialog}>Вибрати папку</button>
@@ -76,11 +115,7 @@ const Inbox = () => {
                 onChange={(e) => setFolderName(e.target.value)}
             />
             <button onClick={createFolder}>Створити нову папку</button>
-            {items.map((item) => (
-                <div key={item.path} onClick={() => item.isDirectory && openFolder(item.path)}>
-                    {item.name}
-                </div>
-            ))}
+            {renderItems(items)}
         </div>
     );
 };
