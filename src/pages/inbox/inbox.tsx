@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 
 interface Item {
     name: string;
@@ -9,13 +9,14 @@ interface Item {
 const Inbox = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [currentFolderPath, setCurrentFolderPath] = useState<string | null>(null);
-    const [folderName, setFolderName] = useState("");
+    const [folderName, setFolderName] = useState('');
+    const [previousFolderPaths, setPreviousFolderPaths] = useState<(string | null)[]>([]);
 
     useEffect(() => {
         if (!currentFolderPath) return;
 
         async function fetchItems() {
-            const items = await window.electron.invoke("get-files-and-folders", currentFolderPath);
+            const items = await window.electron.invoke('get-files-and-folders', currentFolderPath);
             setItems(items);
         }
 
@@ -35,26 +36,39 @@ const Inbox = () => {
     const createFolder = useCallback(async () => {
         if (!currentFolderPath) return;
 
-        const newFolderName = folderName.trim() || generateFolderName("New Folder");
-        const newFolderPath = await window.electron.invoke("create-folder", currentFolderPath, newFolderName);
+        const newFolderName = folderName.trim() || generateFolderName('New Folder');
+        const newFolderPath = await window.electron.invoke('create-folder', currentFolderPath, newFolderName);
         setItems((prevItems) => [
             ...prevItems,
             { name: newFolderName, path: newFolderPath, isDirectory: true },
         ]);
-        setFolderName("");
+        setFolderName('');
     }, [currentFolderPath, folderName, items]);
 
     const openFolderDialog = async () => {
-        const directoryPath = await window.electron.invoke("open-folder-dialog");
+        const directoryPath = await window.electron.invoke('open-folder-dialog');
         if (directoryPath) {
             setCurrentFolderPath(directoryPath);
-            console.log("Selected folder:", directoryPath);
+            console.log('Selected folder:', directoryPath);
+        }
+    };
+
+    const openFolder = (folderPath: string) => {
+        setPreviousFolderPaths([...previousFolderPaths, currentFolderPath]);
+        setCurrentFolderPath(folderPath);
+    };
+
+    const goBack = () => {
+        if (previousFolderPaths.length > 0) {
+            setCurrentFolderPath(previousFolderPaths.pop() || null);
+            setPreviousFolderPaths([...previousFolderPaths]);
         }
     };
 
     return (
         <div>
             <button onClick={openFolderDialog}>Вибрати папку</button>
+            <button onClick={goBack}>Назад</button>
             <input
                 type="text"
                 placeholder="Назва папки"
@@ -63,7 +77,9 @@ const Inbox = () => {
             />
             <button onClick={createFolder}>Створити нову папку</button>
             {items.map((item) => (
-                <div key={item.path}>{item.name}</div>
+                <div key={item.path} onClick={() => item.isDirectory && openFolder(item.path)}>
+                    {item.name}
+                </div>
             ))}
         </div>
     );
