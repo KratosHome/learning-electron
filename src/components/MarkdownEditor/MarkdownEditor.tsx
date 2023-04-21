@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import "./MarkdownEditor.scss";
 import {EditorState, convertToRaw, ContentState} from "draft-js";
 import {Editor} from "react-draft-wysiwyg";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import {FileList} from "../FileList/FileList";
+
 
 export const MarkdownEditor = () => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -77,7 +75,6 @@ export const MarkdownEditor = () => {
     return (
         <div>
             <button onClick={createFile}>Створити файл</button>
-            <FileList files={files}/>
             <Editor
                 editorState={editorState}
                 wrapperClassName="demo-wrapper"

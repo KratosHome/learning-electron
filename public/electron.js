@@ -199,19 +199,3 @@ app.whenReady().then(() => {
     createWindow()
 });
 
-
-/*
-    const fileFunc = () => {
-        const files = dialog.showOpenDialog(mainWindow, {
-            properties: ['openFile'],
-            filters: [{name: 'Markdown', extensions: ['md', 'markdown', 'txt']}]
-        });
-
-        if (!files) return
-
-        const file = files[0]
-        const fileContent = fs.readFileSync(file).toString()
-    }
- */
-
-

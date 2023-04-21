@@ -5,6 +5,7 @@ import {Outlet} from 'react-router-dom';
 import FooterSettings from './components/FooterSettings/FooterSettings';
 import {useDispatch} from 'react-redux';
 import {initTodos} from './store/todoSlice';
+import {FileList} from "./components/FileList/FileList";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
         <div className="container-app">
             <div ref={sectionRef} className="left-container">
                 <PageList/>
+                <FileList/>
                 <FooterSettings/>
             </div>
             <Resize sectionRef={sectionRef} minWidthPane2={minWidthPane2}/>
