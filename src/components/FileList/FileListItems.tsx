@@ -11,6 +11,7 @@ interface FileListItemsProps {
 }
 
 export const FileListItems: React.FC<FileListItemsProps> = ({ items, level, toggleFolder, expandedFolders, openFile }) => {
+
     return (
         <>
             {items.map((item) => (

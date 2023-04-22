@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
 
 type MarkdownViewerParams = {
@@ -19,7 +18,19 @@ const MarkdownViewer: React.FC = () => {
         fetchContent();
     }, [file]);
 
-    return <ReactMarkdown>{content}</ReactMarkdown>;
+    const handleContentChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newContent = event.target.value;
+        setContent(newContent);
+
+        // Зберегти зміни в файлі
+        await window.electron.invoke("write-file", file, newContent);
+    };
+
+    return (
+        <div>
+            <textarea value={content} onChange={handleContentChange} />
+        </div>
+    );
 };
 
 export default MarkdownViewer;

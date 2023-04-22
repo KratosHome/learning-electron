@@ -5,11 +5,10 @@ import {useDispatch} from "react-redux";
 type FolderButtonType = {
     filePath: any
     items: any
-    generateFolderName: any
     setItems: any
 }
 
-const FolderButton: FC<FolderButtonType> = ({filePath, items, generateFolderName, setItems}) => {
+const FolderButton: FC<FolderButtonType> = ({filePath, items, setItems}) => {
     const [folderName, setFolderName] = useState("");
     const dispatch = useDispatch();
 
@@ -18,8 +17,17 @@ const FolderButton: FC<FolderButtonType> = ({filePath, items, generateFolderName
         if (directoryPath) {
             dispatch(setFilePath(directoryPath));
         }
-    };
 
+    };
+    const generateFolderName = (baseName: string) => {
+        let name = baseName;
+        let count = 1;
+        while (items.find((item: any) => item.name === name)) {
+            name = `${baseName} (${count})`;
+            count++;
+        }
+        return name;
+    };
     const createFolder = useCallback(async () => {
         if (!filePath) return;
         const newFolderName = folderName.trim() || generateFolderName("New Folder");

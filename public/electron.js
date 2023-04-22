@@ -192,6 +192,18 @@ ipcMain.handle("read-file", async (event, filePath) => {
     }
 });
 
+ipcMain.handle("write-file", async (event, filePath, content) => {
+    console.log(`Handling write-file request for: ${filePath}`);
+    try {
+        await fs.promises.writeFile(filePath, content, { encoding: "utf-8" });
+        console.log("File successfully written");
+        return true;
+    } catch (error) {
+        console.error("Error writing file:", error);
+        return false;
+    }
+});
+
 
 
 app.whenReady().then(() => {

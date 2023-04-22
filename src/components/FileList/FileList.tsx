@@ -1,84 +1,71 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import {setFilePath} from "../../store/fileSlice";
-import { Item } from "../../types";
+import {Item} from "../../types";
 import FolderButton from "../FolderButton/FolderButton";
-import { FileListItems } from "./FileListItems";
-import ReactMarkdown from "react-markdown";
-import { useNavigate } from "react-router";
+import {FileListItems} from "./FileListItems";
+import {useNavigate} from "react-router";
 
 
 export const FileList = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [items, setItems] = useState<Item[]>([]);
     const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+    const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
+    const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
 
     const filePath = useSelector((state: RootState) => state.files.files.patch);
-    const dispatch = useDispatch();
-
-    const fetchItems = async (dirPath: string): Promise<Item[]> => {
-        const filesAndFolders = await window.electron.invoke("get-files-and-folders", dirPath);
-        const filteredFilesAndFolders = filesAndFolders.filter((item: Item) => item.name !== ".DS_Store");
-
-        const items = await Promise.all(
-            filteredFilesAndFolders.map(async (item: Item) => {
-                if (item.isDirectory) {
-                    item.children = await fetchItems(item.path);
-                }
-                return item;
-            })
-        );
-
-        return items;
-    };
-
-    const fetchFilePath = async () => {
-        const savedFilePath = await window.storeAPI.getValue("files");
-        if (savedFilePath) {
-            dispatch(setFilePath(savedFilePath));
-        }
-    };
-
-    useEffect(() => {
-        fetchFilePath();
-    }, [dispatch]);
 
     useEffect(() => {
         if (!filePath) return;
+        const fetchItems = async (dirPath: string): Promise<Item[]> => {
+            const filesAndFolders = await window.electron.invoke("get-files-and-folders", dirPath);
+            // для отримання списку файлів та папок у вказаній директорі
+            const filteredFilesAndFolders = filesAndFolders.filter((item: Item) => item.name !== ".DS_Store");
+            // видалити елементи з назвою ".DS_Store"
+            const items = await Promise.all(
+                filteredFilesAndFolders.map(async (item: Item) => {
+                    if (item.isDirectory) {
+                        item.children = await fetchItems(item.path);
+                    }
+                    return item;
+                })
+            );
+            return items;
+        };
+
         fetchItems(filePath).then(setItems);
     }, [filePath]);
 
-    const generateFolderName = (baseName: string) => {
-        let name = baseName;
-        let count = 1;
-        while (items.find((item) => item.name === name)) {
-            name = `${baseName} (${count})`;
-            count++;
-        }
-        return name;
-    };
+
+    useEffect(() => {
+        // шлях до папки з файлами
+        const fetchFilePath = async () => {
+            const savedFilePath = await window.storeAPI.getValue("files");
+            if (savedFilePath) {
+                dispatch(setFilePath(savedFilePath));
+            }
+        };
+
+        fetchFilePath();
+    }, [dispatch]);
 
 
     const toggleFolder = (folderPath: string) => {
         const newExpandedFolders = new Set(expandedFolders);
+        // шлаях до папки
         if (newExpandedFolders.has(folderPath)) {
             newExpandedFolders.delete(folderPath);
+            // папка зачинена
         } else {
             newExpandedFolders.add(folderPath);
+            // папка відчинена
         }
         setExpandedFolders(newExpandedFolders);
     };
 
-
-
-
-    const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-    const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
-
-    // ... rest of your code
-
-    // Add a new function to open and read the file content
-    const navigate = useNavigate();
 
     const openFile = (filePath: string, fileType: string) => {
         switch (fileType) {
@@ -99,7 +86,7 @@ export const FileList = () => {
 
         switch (selectedFileType) {
             case "image":
-                return <img src={`data:image/png;base64,${selectedFileContent}`} alt="Selected" />;
+                return <img src={`data:image/png;base64,${selectedFileContent}`} alt="Selected"/>;
             case "markdown":
                 return <pre>{selectedFileContent}</pre>;
             default:
@@ -110,8 +97,18 @@ export const FileList = () => {
 
     return (
         <div>
-            <FolderButton filePath={filePath} items={items} generateFolderName={generateFolderName} setItems={setItems} />
-            <FileListItems items={items} level={0} toggleFolder={toggleFolder} expandedFolders={expandedFolders} openFile={openFile} />
+            <FolderButton
+                filePath={filePath}
+                items={items}
+                setItems={setItems}
+            />
+            <FileListItems
+                items={items}
+                level={0}
+                toggleFolder={toggleFolder}
+                expandedFolders={expandedFolders}
+                openFile={openFile}
+            />
             {renderFileContent()}
         </div>
     );
