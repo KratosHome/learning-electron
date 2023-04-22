@@ -176,6 +176,23 @@ ipcMain.handle("open-folder-dialog", async () => {
 
     return null;
 });
+// ... your existing electron code
+
+ipcMain.handle("read-file", async (event, filePath) => {
+    console.log(`Handling read-file request for: ${filePath}`);
+    try {
+        const fileExtension = path.extname(filePath).toLowerCase();
+        const encoding = fileExtension === ".md" || fileExtension === ".markdown" ? "utf-8" : "base64";
+        const content = await fs.promises.readFile(filePath, { encoding });
+        console.log(`File content: ${content}`);
+        return content;
+    } catch (error) {
+        console.error("Error reading file:", error);
+        return null;
+    }
+});
+
+
 
 app.whenReady().then(() => {
     ipcMain.handle('get-value', (event, key) => {

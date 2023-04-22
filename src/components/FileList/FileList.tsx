@@ -1,53 +1,50 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/store";
-import {setFilePath} from "../../store/fileSlice"
+import {setFilePath} from "../../store/fileSlice";
+import { Item } from "../../types";
+import FolderButton from "../FolderButton/FolderButton";
+import { FileListItems } from "./FileListItems";
+import ReactMarkdown from "react-markdown";
+import { useNavigate } from "react-router";
 
-interface Item {
-    name: string;
-    path: string;
-    isDirectory: boolean;
-    children?: Item[];
-}
 
 export const FileList = () => {
     const [items, setItems] = useState<Item[]>([]);
-    const [folderName, setFolderName] = useState('');
-    const [previousFolderPaths, setPreviousFolderPaths] = useState<(string | null)[]>([]);
     const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
-
 
     const filePath = useSelector((state: RootState) => state.files.files.patch);
     const dispatch = useDispatch();
 
+    const fetchItems = async (dirPath: string): Promise<Item[]> => {
+        const filesAndFolders = await window.electron.invoke("get-files-and-folders", dirPath);
+        const filteredFilesAndFolders = filesAndFolders.filter((item: Item) => item.name !== ".DS_Store");
 
-    async function fetchItems(dirPath: string): Promise<Item[]> {
-        const filesAndFolders = await window.electron.invoke('get-files-and-folders', dirPath);
         const items = await Promise.all(
-            filesAndFolders.map(async (item: Item) => {
+            filteredFilesAndFolders.map(async (item: Item) => {
                 if (item.isDirectory) {
                     item.children = await fetchItems(item.path);
                 }
                 return item;
             })
         );
-        return items;
-    }
-    useEffect(() => {
-        // збереження стору на компі
-        const fetchFilePath = async () => {
-            const savedFilePath = await window.storeAPI.getValue("files");
-            if (savedFilePath) {
-                dispatch(setFilePath(savedFilePath));
-            }
-        };
 
+        return items;
+    };
+
+    const fetchFilePath = async () => {
+        const savedFilePath = await window.storeAPI.getValue("files");
+        if (savedFilePath) {
+            dispatch(setFilePath(savedFilePath));
+        }
+    };
+
+    useEffect(() => {
         fetchFilePath();
     }, [dispatch]);
 
     useEffect(() => {
         if (!filePath) return;
-
         fetchItems(filePath).then(setItems);
     }, [filePath]);
 
@@ -61,36 +58,6 @@ export const FileList = () => {
         return name;
     };
 
-    const createFolder = useCallback(async () => {
-        if (!filePath) return;
-
-        const newFolderName = folderName.trim() || generateFolderName('New Folder');
-        const newFolderPath = await window.electron.invoke('create-folder', filePath, newFolderName);
-        setItems((prevItems) => [
-            ...prevItems,
-            {name: newFolderName, path: newFolderPath, isDirectory: true},
-        ]);
-        setFolderName('');
-    }, [filePath, folderName, items]);
-
-    const openFolderDialog = async () => {
-        const directoryPath = await window.electron.invoke('open-folder-dialog');
-        if (directoryPath) {
-            dispatch(setFilePath(directoryPath));
-        }
-    };
-
-    const openFolder = (folderPath: string) => {
-        setPreviousFolderPaths([...previousFolderPaths, filePath]);
-        dispatch(setFilePath(folderPath));
-    };
-
-    const goBack = () => {
-        if (previousFolderPaths.length > 0) {
-            dispatch(setFilePath(previousFolderPaths.pop() || null));
-            setPreviousFolderPaths([...previousFolderPaths]);
-        }
-    };
 
     const toggleFolder = (folderPath: string) => {
         const newExpandedFolders = new Set(expandedFolders);
@@ -102,37 +69,51 @@ export const FileList = () => {
         setExpandedFolders(newExpandedFolders);
     };
 
-    const renderItems = (items: Item[], level = 0) => {
-        return items.map((item) => (
-            <div key={item.path}>
-                <div
-                    style={{paddingLeft: `${level * 16}px`}}
-                    onClick={() => {
-                        if (item.isDirectory) {
-                            toggleFolder(item.path);
-                        }
-                    }}
-                >
-                    {item.name}
-                </div>
-                {item.isDirectory && expandedFolders.has(item.path) && item.children && renderItems(item.children, level + 1)}
-            </div>
-        ));
+
+
+
+    const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
+    const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+
+    // ... rest of your code
+
+    // Add a new function to open and read the file content
+    const navigate = useNavigate();
+
+    const openFile = (filePath: string, fileType: string) => {
+        switch (fileType) {
+            case 'image':
+                navigate(`/image/${encodeURIComponent(filePath)}`);
+                break;
+            case 'markdown':
+                navigate(`/markdown/${encodeURIComponent(filePath)}`);
+                break;
+            default:
+                break;
+        }
+    };
+
+    // Render the appropriate file content based on the file type
+    const renderFileContent = () => {
+        if (!selectedFileContent || !selectedFileType) return null;
+
+        switch (selectedFileType) {
+            case "image":
+                return <img src={`data:image/png;base64,${selectedFileContent}`} alt="Selected" />;
+            case "markdown":
+                return <pre>{selectedFileContent}</pre>;
+            default:
+                return null;
+        }
     };
 
 
     return (
         <div>
-            <button onClick={openFolderDialog}>Вибрати папку</button>
-            <button onClick={goBack}>Назад</button>
-            <input
-                type="text"
-                placeholder="Назва папки"
-                value={folderName}
-                onChange={(e) => setFolderName(e.target.value)}
-            />
-            <button onClick={createFolder}>Створити нову папку</button>
-            {renderItems(items)}
+            <FolderButton filePath={filePath} items={items} generateFolderName={generateFolderName} setItems={setItems} />
+            <FileListItems items={items} level={0} toggleFolder={toggleFolder} expandedFolders={expandedFolders} openFile={openFile} />
+            {renderFileContent()}
         </div>
     );
 };
+

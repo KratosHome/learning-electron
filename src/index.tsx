@@ -12,6 +12,8 @@ import Calendar from "./pages/Calendar/Calendar";
 import Inbox from "./pages/inbox/inbox";
 import {store} from './store/store';
 import { Provider } from 'react-redux'
+import MarkdownViewer from './pages/MarkdownViewer/MarkdownViewer';
+import ImageViewer from './pages/ImageViewer/ImageViewer';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -20,15 +22,23 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App/>,
+        element: <App />,
         children: [
             {
                 path: "/",
-                element: <Inbox/>
+                element: <Inbox />,
             },
             {
                 path: "/calendar",
-                element: <Calendar/>
+                element: <Calendar />,
+            },
+            {
+                path: "/markdown/:file",
+                element: <MarkdownViewer />,
+            },
+            {
+                path: "/image/:file",
+                element: <ImageViewer />,
             },
         ],
     },
