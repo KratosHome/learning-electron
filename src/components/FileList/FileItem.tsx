@@ -13,6 +13,7 @@ export const FileItem: React.FC<FileItemProps> = ({ item, level, expandedFolders
     const [localExpandedFolders, setLocalExpandedFolders] = useState<Set<string>>(expandedFolders || new Set<string>());
 
     const onItemClick = (item: Item) => {
+        // визначає які папки відкріті а які зікриті
         if (item.isDirectory) {
             const newLocalExpandedFolders = new Set(localExpandedFolders);
             if (newLocalExpandedFolders.has(item.path)) {
@@ -42,9 +43,14 @@ export const FileItem: React.FC<FileItemProps> = ({ item, level, expandedFolders
 
     const fileType = getFileType(item.name);
 
+
+
     return (
         <ul>
-            <li key={item.path} style={{ paddingLeft: level * 20 }}>
+            <li
+                key={item.path}
+                style={{ paddingLeft: level * 20 }}
+            >
                 <div onClick={() => onItemClick(item)}>
                     {fileType === 'image' ? (
                         <Link to={`/image/${encodeURIComponent(item.path)}`}>{item.name}</Link>
