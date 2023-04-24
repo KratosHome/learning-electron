@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Item } from "../../types";
 import { FileListItems } from './FileListItems';
 
 interface FileItemProps {
-    item:any
+    item: any;
     level: number;
-    toggleFolder: (folderPath: string) => void;
-    expandedFolders: Set<string>;
-    openFile?: (filePath: string, fileType: string) => void;
+    expandedFolders?: Set<string>;
 }
 
-export const FileItem: React.FC<FileItemProps> = ({ item, level, toggleFolder, expandedFolders, openFile }) => {
+export const FileItem: React.FC<FileItemProps> = ({ item, level, expandedFolders }) => {
+    const [localExpandedFolders, setLocalExpandedFolders] = useState<Set<string>>(expandedFolders || new Set<string>());
 
     const onItemClick = (item: Item) => {
         if (item.isDirectory) {
-            toggleFolder(item.path);
-        } else {
-            const fileType = getFileType(item.name);
-            if (fileType && openFile) {
-                openFile(item.path, fileType);
+            const newLocalExpandedFolders = new Set(localExpandedFolders);
+            if (newLocalExpandedFolders.has(item.path)) {
+                newLocalExpandedFolders.delete(item.path);
+            } else {
+                newLocalExpandedFolders.add(item.path);
             }
+            setLocalExpandedFolders(newLocalExpandedFolders);
         }
     };
 
@@ -39,21 +40,25 @@ export const FileItem: React.FC<FileItemProps> = ({ item, level, toggleFolder, e
         }
     };
 
-
+    const fileType = getFileType(item.name);
 
     return (
         <ul>
             <li key={item.path} style={{ paddingLeft: level * 20 }}>
                 <div onClick={() => onItemClick(item)}>
-                    {item.name}
+                    {fileType === 'image' ? (
+                        <Link to={`/image/${encodeURIComponent(item.path)}`}>{item.name}</Link>
+                    ) : fileType === 'markdown' ? (
+                        <Link to={`/markdown/${encodeURIComponent(item.path)}`}>{item.name}</Link>
+                    ) : (
+                        item.name
+                    )}
                 </div>
-                {item.isDirectory && expandedFolders.has(item.path) && (
+                {item.isDirectory && localExpandedFolders.has(item.path) && (
                     <FileListItems
                         items={item.children || []}
                         level={level + 1}
-                        toggleFolder={toggleFolder}
-                        expandedFolders={expandedFolders}
-                        openFile={openFile}
+                        expandedFolders={localExpandedFolders}
                     />
                 )}
             </li>

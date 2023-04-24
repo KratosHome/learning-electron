@@ -5,20 +5,19 @@ import { FileItem } from "./FileItem";
 interface FileListItemsProps {
     items: Item[];
     level: number;
-    toggleFolder: (folderPath: string) => void;
-    expandedFolders: Set<string>;
-    openFile?: (filePath: string, fileType: string) => void;
+    expandedFolders?: Set<string>;
 }
 
-export const FileListItems: React.FC<FileListItemsProps> = ({ items, level, toggleFolder, expandedFolders, openFile }) => {
+export const FileListItems: React.FC<FileListItemsProps> = ({ items, level, expandedFolders }) => {
+    const localExpandedFolders = expandedFolders || new Set();
 
     return (
         <>
             {items.map((item) => (
                 <React.Fragment key={item.path}>
-                    <FileItem item={item} level={level} toggleFolder={toggleFolder} expandedFolders={expandedFolders} openFile={openFile} />
-                    {item.isDirectory && item.children && expandedFolders.has(item.path) && (
-                        <FileListItems items={item.children} level={level + 1} toggleFolder={toggleFolder} expandedFolders={expandedFolders} openFile={openFile} />
+                    <FileItem item={item} level={level} expandedFolders={localExpandedFolders} />
+                    {item.isDirectory && item.children && localExpandedFolders.has(item.path) && (
+                        <FileListItems items={item.children} level={level + 1} expandedFolders={localExpandedFolders} />
                     )}
                 </React.Fragment>
             ))}

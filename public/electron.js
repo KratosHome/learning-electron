@@ -62,7 +62,7 @@ function createWindow() {
                 {
                     label: 'My Custom Button', // Назва вашої кнопки
                     click() {
-                        console.log('My Custom Button clicked'); // Функція, яка виконується при натисканні на кнопку
+                  //      console.log('My Custom Button clicked'); // Функція, яка виконується при натисканні на кнопку
                     },
                 },
             ]
@@ -179,12 +179,12 @@ ipcMain.handle("open-folder-dialog", async () => {
 // ... your existing electron code
 
 ipcMain.handle("read-file", async (event, filePath) => {
-    console.log(`Handling read-file request for: ${filePath}`);
+ //   console.log(`Handling read-file request for: ${filePath}`);
     try {
         const fileExtension = path.extname(filePath).toLowerCase();
         const encoding = fileExtension === ".md" || fileExtension === ".markdown" ? "utf-8" : "base64";
         const content = await fs.promises.readFile(filePath, { encoding });
-        console.log(`File content: ${content}`);
+      //  console.log(`File content: ${content}`);
         return content;
     } catch (error) {
         console.error("Error reading file:", error);
@@ -193,13 +193,13 @@ ipcMain.handle("read-file", async (event, filePath) => {
 });
 
 ipcMain.handle("write-file", async (event, filePath, content) => {
-    console.log(`Handling write-file request for: ${filePath}`);
+   // console.log(`Handling write-file request for: ${filePath}`);
     try {
         await fs.promises.writeFile(filePath, content, { encoding: "utf-8" });
-        console.log("File successfully written");
+     //   console.log("File successfully written");
         return true;
     } catch (error) {
-        console.error("Error writing file:", error);
+      //  console.error("Error writing file:", error);
         return false;
     }
 });

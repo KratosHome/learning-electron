@@ -5,16 +5,11 @@ import {setFilePath} from "../../store/fileSlice";
 import {Item} from "../../types";
 import FolderButton from "../FolderButton/FolderButton";
 import {FileListItems} from "./FileListItems";
-import {useNavigate} from "react-router";
 
 
 export const FileList = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [items, setItems] = useState<Item[]>([]);
-    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
-    const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-    const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
 
     const filePath = useSelector((state: RootState) => state.files.files.patch);
 
@@ -53,48 +48,6 @@ export const FileList = () => {
     }, [dispatch]);
 
 
-    const toggleFolder = (folderPath: string) => {
-        const newExpandedFolders = new Set(expandedFolders);
-        // шлаях до папки
-        if (newExpandedFolders.has(folderPath)) {
-            newExpandedFolders.delete(folderPath);
-            // папка зачинена
-        } else {
-            newExpandedFolders.add(folderPath);
-            // папка відчинена
-        }
-        setExpandedFolders(newExpandedFolders);
-    };
-
-
-    const openFile = (filePath: string, fileType: string) => {
-        switch (fileType) {
-            case 'image':
-                navigate(`/image/${encodeURIComponent(filePath)}`);
-                break;
-            case 'markdown':
-                navigate(`/markdown/${encodeURIComponent(filePath)}`);
-                break;
-            default:
-                break;
-        }
-    };
-
-    // Render the appropriate file content based on the file type
-    const renderFileContent = () => {
-        if (!selectedFileContent || !selectedFileType) return null;
-
-        switch (selectedFileType) {
-            case "image":
-                return <img src={`data:image/png;base64,${selectedFileContent}`} alt="Selected"/>;
-            case "markdown":
-                return <pre>{selectedFileContent}</pre>;
-            default:
-                return null;
-        }
-    };
-
-
     return (
         <div>
             <FolderButton
@@ -105,11 +58,7 @@ export const FileList = () => {
             <FileListItems
                 items={items}
                 level={0}
-                toggleFolder={toggleFolder}
-                expandedFolders={expandedFolders}
-                openFile={openFile}
             />
-            {renderFileContent()}
         </div>
     );
 };
