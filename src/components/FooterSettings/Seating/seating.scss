@@ -1,21 +1,27 @@
-.seating {
+.container_seating {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
 
   svg {
-    width: calc(var(--index) * .5);
-    height: calc(var(--index) * .5);
+    width: calc(var(--index) * 1);
+    height: calc(var(--index) * 1);
 
     path {
-      fill: red;
+      fill: var(--color-link);
     }
 
     &:hover {
       path {
-        fill: blue;
+        fill: var(--color-link-hover);
       }
     }
   }
+}
+
+.container_modal_setting {
+  background-color: red;
+  width: 90vw;
+  height: 90vh;
 }

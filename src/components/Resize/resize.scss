@@ -1,0 +1,17 @@
+.resize {
+  background-color: red;
+  border: 1px solid var(--background);
+  border-radius: 2px;
+  transition: 300ms;
+  font-size: calc(var(--index) * .75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  width: 4px;
+  cursor: col-resize;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
+import "./normalize.scss"
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './i18n';
@@ -11,7 +12,7 @@ import {
 import Calendar from "./pages/Calendar/Calendar";
 import Inbox from "./pages/inbox/inbox";
 import {store} from './store/store';
-import { Provider } from 'react-redux'
+import {Provider} from 'react-redux'
 import MarkdownViewer from './pages/MarkdownViewer/MarkdownViewer';
 import ImageViewer from './pages/ImageViewer/ImageViewer';
 
@@ -22,23 +23,23 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App />,
+        element: <App/>,
         children: [
             {
                 path: "/",
-                element: <Inbox />,
+                element: <Inbox/>,
             },
             {
                 path: "/calendar",
-                element: <Calendar />,
+                element: <Calendar/>,
             },
             {
                 path: "/markdown/:file",
-                element: <MarkdownViewer />,
+                element: <MarkdownViewer/>,
             },
             {
                 path: "/image/:file",
-                element: <ImageViewer />,
+                element: <ImageViewer/>,
             },
         ],
     },

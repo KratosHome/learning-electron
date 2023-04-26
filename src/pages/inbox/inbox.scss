@@ -1,0 +1,15 @@
+.container_inbox {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+
+  .right_container {
+    flex-grow: 1;
+    overflow: auto;
+
+  }
+  .left_container{
+    position: relative;
+  }
+}

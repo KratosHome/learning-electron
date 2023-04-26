@@ -1,5 +1,6 @@
 // components/Resize/Resize.tsx
 import React, { FC, useEffect, useRef, useState } from 'react';
+import "./resize.scss"
 
 interface ResizeProps {
     sectionRef: React.RefObject<HTMLDivElement>;

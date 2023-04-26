@@ -6,15 +6,57 @@
   box-sizing: border-box;
 }
 
+
+@font-face {
+  font-family: 'AbhayaLibre';
+  src: url('./fonts/AbhayaLibre-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AbhayaLibre';
+  src: url('./fonts/AbhayaLibre-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AbhayaLibre';
+  src: url('./fonts/AbhayaLibre-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AbhayaLibre';
+  src: url('./fonts/AbhayaLibre-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AbhayaLibre';
+  src: url('./fonts/AbhayaLibre-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+
 :root {
   --hue: 223;
   --index: calc(1vw + 1vh);
+  --background: rgba(33, 33, 52, 0.02);
+  --color-text: rgb(201, 201, 218);
+  --color-link: rgb(0, 0, 0);
+  --color-link-hover: rgb(52, 52, 66);
+  /*
+    Стілі для застосунку
+  */
   --margin-glock-top: calc(var(--index) * 0.25);
-  --background: white;
   --background-block: #bbbbbb;
   --background-button: rgb(241, 0, 56);
   --background-button-hover: #bb0606;
-  --color-text: rgb(20, 20, 20);
   --color-text-block: white;
   --color-text-active: rgb(201, 201, 218);
   --hover-text: #4cceac;
@@ -26,11 +68,18 @@
 }
 
 [data-theme='dark'] {
+  --index: calc(1vw + 1vh);
   --background: rgb(24, 24, 38);
+  --color-text: rgb(231, 231, 239);
+  --color-link: rgb(201, 201, 218);
+  --color-link-hover: #4cceac;
+  /*
+  Стілі для застосунку
+*/
+
   --background-block: rgb(33, 33, 52);
   --background-button: #d20404;
   --background-button-hover: #bb0606;
-  --color-text: rgb(201, 201, 218);
   --color-text-block: rgb(225, 217, 217);
   --color-text-active: rgb(238, 86, 86);
   --hover-text: rgb(231, 181, 181);
@@ -44,44 +93,50 @@
 
 body {
   background-color: var(--background);
-  color: var(--color);
-  font-size: calc(var(--index) * .65);
-  line-height: 1.75;
+  color: var(--color-text);
+  font-size: calc(var(--index) * .85);
+  line-height: calc(var(--index) * .8);
+  font-family: 'AbhayaLibre', sans-serif;
+  font-weight: 400;
 }
 
+ul,
+li,
 a {
-  color: var(--color-text);
+  font-family: 'AbhayaLibre', sans-serif;
+  font-weight: 400;
+  color: var(--color-link);
   text-decoration: none;
   transition: background-color 0.4s ease-in-out;
-
-  &:hover {
-    transition: background-color 0.4s ease-in-out;
-    color: var(--hover-text);
-    cursor: pointer;
-  }
+  list-style: none;
+  line-height: calc(var(--index) * 1);
 }
 
+ul:hover,
+li:hover,
+a:hover {
+  transition: background-color 0.4s ease-in-out;
+  color: var(--color-link-hover);
+  cursor: pointer;
+}
 
 button {
+  font-family: 'AbhayaLibre', sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--index) * .65);
   border: none;
   background-color: transparent;
+  color: var(--color-link);
 
   &:hover {
     cursor: pointer;
+    color: var(--color-link-hover);
   }
 }
 
-
-@media (max-width: 999px) {
-  body {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 760px) {
-  body {
-    font-size: 15px;
-  }
+.row {
+  margin-right: calc(var(--index) * .5);
+  margin-left: calc(var(--index) * .5);
 }
 
 .container-app {
@@ -91,38 +146,13 @@ button {
   position: fixed;
 
   .right-container {
+    margin-top: calc(var(--index) * .5);
     flex-grow: 1;
     overflow: auto;
-
   }
-  .left-container{
+
+  .left-container {
+    margin-top: calc(var(--index) * .5);
     position: relative;
   }
-}
-
-.resize {
-  background-color: red;
-  border: 1px solid var(--background);
-  border-radius: 2px;
-  transition: 300ms;
-  font-size: calc(var(--index) * .75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: red;
-
-  &:hover {
-    opacity: 0.5;
-  }
-}
-
-.resize-vertical {
-  width: 4px;
-  cursor: col-resize;
-
-  div {
-    transform: rotate(90deg);
-    margin-right: calc(var(--index) * -.4);
-  }
-
 }

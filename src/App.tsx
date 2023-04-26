@@ -31,14 +31,14 @@ function App() {
 
     return (
         <div className="container-app">
-            <div ref={sectionRef} className="left-container">
+            <div ref={sectionRef} className="left-container row">
                 <PageList/>
                 <FileList/>
                 <FooterSettings/>
             </div>
             <Resize sectionRef={sectionRef} minWidthPane2={minWidthPane2}/>
             <div
-                className="right-container"
+                className="right-container row"
                 style={{minWidth: `${minWidthPane2}px`, maxWidth: `${maxWidthPane2}px`}}
             >
                 <Outlet/>
