@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
 
-export const useMount = (opened:boolean, animationTime:number) => {
+export const useMount = (opened: boolean, animationTime: number) => {
     const [mounted, setMounted] = useState<boolean>(false)
 
     useEffect(() => {

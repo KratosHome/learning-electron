@@ -50,6 +50,8 @@ export const ReactModal: React.FC<SelectedModalType> = ({
             };
         }
     });
+
+
     if (mounted) {
         return createPortal(
             <div className={onBlur ? 'onBlur' : ''}>
