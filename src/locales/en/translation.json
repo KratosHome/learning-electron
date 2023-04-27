@@ -1,7 +1,10 @@
 {
+  "_comment1": "{t('calendar')}",
   "welcome": "welcome",
   "today": "today",
   "calendar": "calendar",
   "todo": "to do",
-  "upcoming": "upcoming"
+  "upcoming": "upcoming",
+  "apply": "apply",
+  "font-size": "font size"
 }

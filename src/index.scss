@@ -47,10 +47,15 @@
   --hue: 223;
   --index: calc(1vw + 1vh);
   --background: rgba(33, 33, 52, 0.02);
+  --color-background-block: rgb(50, 50, 77);
   --color-text: rgb(201, 201, 218);
   --color-link: rgb(0, 0, 0);
   --color-link-hover: rgb(52, 52, 66);
+  --color-link-block: rgb(165, 165, 186);
+  --color-link-hover-block: rgb(165, 165, 186);
+  --color-background-buttom-hover: rgb(24, 24, 38);
   /*
+background: rgb(24, 24, 38); ховер бутом блок
     Стілі для застосунку
   */
   --margin-glock-top: calc(var(--index) * 0.25);
@@ -70,9 +75,13 @@
 [data-theme='dark'] {
   --index: calc(1vw + 1vh);
   --background: rgb(24, 24, 38);
-  --color-text: rgb(231, 231, 239);
-  --color-link: rgb(201, 201, 218);
+  --color-background-block: rgb(50, 50, 77);
+  --color-text: rgb(255, 255, 255);
+  --color-link: rgb(255, 255, 255);
   --color-link-hover: #4cceac;
+  --color-link-block: rgb(165, 165, 186);
+  --color-link-hover-block: rgb(165, 165, 186);
+  --color-background-buttom-hover: rgb(24, 24, 38);
   /*
   Стілі для застосунку
 */
@@ -94,7 +103,7 @@
 body {
   background-color: var(--background);
   color: var(--color-text);
-  font-size: calc(var(--index) * .85);
+  font-size:calc(var(--index) * .85);
   line-height: calc(var(--index) * .8);
   font-family: 'AbhayaLibre', sans-serif;
   font-weight: 400;

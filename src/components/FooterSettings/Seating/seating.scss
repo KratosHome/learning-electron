@@ -21,7 +21,25 @@
 }
 
 .container_modal_setting {
-  background-color: red;
+  background-color: var(--color-background-block);
   width: 90vw;
   height: 90vh;
+  padding: 5px;
+
+  .wrap_modal_setting {
+    margin-top: 5px;
+    margin-left: calc(var(--index) * 1);
+  }
+
+  .container-button {
+    border-radius: 5px;
+    width: calc(var(--index) * 4);
+    height: calc(var(--index) * 1.5);
+    transition: background-color 0.2s ease; /* Додано */
+
+    &:hover {
+      background-color: var(--color-background-buttom-hover);
+    }
+  }
+
 }

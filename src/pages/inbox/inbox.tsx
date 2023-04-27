@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {todoType} from "../../types/todoType";
 import Resize from "../../components/Resize/Resize";
 import "./inbox.scss"
@@ -44,9 +44,6 @@ const Inbox = () => {
         setNewTask(event.target.value);
     };
 
-    const handleTaskClick = (task: todoType) => {
-        setSelectedTask(task);
-    };
 
     const addTask = () => {
         if (newTask.trim()) {
@@ -69,7 +66,24 @@ const Inbox = () => {
         }
     };
 
-// {t('calendar')} Супер, в мене є комерційний досвід React та NextJS але досвіду з React Native небуло, якщо узгодимо то за два тижні я освою фреймворк завжди хотів але нехватало часу на це.
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [newTask, tasks]);
+
+
+    const handleTaskClick = (task: todoType) => {
+        setSelectedTask(task);
+    };
 
     return (
         <div className="container_inbox">

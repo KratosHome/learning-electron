@@ -1,19 +1,28 @@
-import React, {useRef, useState} from 'react';
-import {ReactModal} from '../../ReactModal';
+import React, {useEffect, useState} from 'react';
+import {ReactModal} from '../../ReactModal/ReactModal';
+import FontSelector from './FontSelector/FontSelector';
 import "./seating.scss"
+import {t} from "i18next";
 
 const Seating = () => {
     const [visible, setVisible] = useState<boolean>(false)
-    const nodeRef = useRef(null);
+    const [fontSize, setFontSize] = useState(16);
 
+    const applyChange = () => {
+        document.documentElement.style.setProperty('--index', `${fontSize}px`);
+    };
 
-    const clickSelects = (e: React.MouseEvent<HTMLButtonElement>) => {
-        setVisible(!visible)
-    }
+    useEffect(() => {
+        window.addEventListener('keydown', applyChange);
+
+        return () => {
+            window.removeEventListener('keydown', applyChange);
+        };
+    }, [fontSize]);
 
     return (
         <>
-            <button className="container_seating" onClick={clickSelects}>
+            <button className="container_seating" onClick={() => setVisible(!visible)}>
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="512.000000pt" height="512.000000pt"
                      viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#000000"
@@ -26,17 +35,14 @@ const Seating = () => {
                 </svg>
             </button>
             <ReactModal
-                isModalOpen={visible}
-                animationTime={200}
+                opened={visible}
                 onClose={() => setVisible(!visible)}
-                nodeRef={nodeRef}
-                modalPosition={'center-modal-position'}
             >
-                <div
-                    ref={nodeRef}
-                    className="container_modal_setting"
-                >
-                    11111111 fdsvd
+                <div className="container_modal_setting">
+                    <div className="wrap_modal_setting">
+                        <FontSelector fontSize={fontSize} setFontSize={setFontSize}/>
+                    </div>
+                    <button className="container-button" onClick={applyChange}>{t('apply')}</button>
                 </div>
             </ReactModal>
         </>
@@ -44,36 +50,3 @@ const Seating = () => {
 };
 
 export default Seating;
-
-
-/*
-    const [visible, setVisible] = useState<boolean>(false)
-    const [topCoords, setTopCoords] = useState<any>(0);
-    const [leftCoords, setLeftCoords] = useState<number>(0);
-    const nodeRef = useRef(null);
-
-
-    const clickSelects = (e: React.MouseEvent<HTMLButtonElement>) => {
-        let rect = (e.target as Element).getBoundingClientRect();
-        setTopCoords(rect.top + 21);
-        setLeftCoords(rect.left);
-        setVisible(!visible)
-    }
-
-
-
-            <ReactModal
-                isModalOpen={visible}
-                animationTime={200}
-                onClose={() => setVisible(!visible)}
-                topCoords={topCoords}
-                leftCoords={leftCoords}
-                nodeRef={nodeRef}
-            >
-                <div
-                    ref={nodeRef}
-                    className="container_modal_setting"
-                >
-                    11111111 fdsvd
-                </div>
- */

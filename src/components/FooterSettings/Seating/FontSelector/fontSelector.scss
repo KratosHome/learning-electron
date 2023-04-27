@@ -1,0 +1,14 @@
+.container-font-size {
+  label {
+    margin-right: calc(var(--index) * 1);
+  }
+
+  input {
+    background-color: var(--color-background-block);
+    border: 1px solid var(--background);
+    border-radius: 3px;
+    color: var(--color-link);
+    outline: none;
+    padding-left: calc(var(--index) * 1);
+  }
+}
