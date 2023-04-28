@@ -1,0 +1,38 @@
+.ResizeHandleOuter {
+    flex: 0 0 calc(var(--index) * 1);
+    position: relative;
+    outline: none;
+
+    --background-color: transparent;
+}
+
+.ResizeHandleOuter[data-resize-handle-active] {
+    --background-color: var(--color-background-block);
+}
+
+
+.ResizeHandleInner {
+    position: absolute;
+    top: 0.25em;
+    bottom: 0.25em;
+    left: 0.25em;
+    right: 0.25em;
+    border-radius: 0.25em;
+    background-color: var(--color-background-block);
+    transition: background-color 0.2s linear;
+}
+
+.Icon {
+    width: calc(var(--index) * .7);
+    height: calc(var(--index) * .7);
+    position: absolute;
+    left: calc(50% - 0.4rem);
+    top: calc(50% - 0.4rem);
+    transform: rotate(90deg);
+    color: var(--color-link-hover)
+}
+
+
+
+
+

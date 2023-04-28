@@ -4,6 +4,12 @@ import Resize from "../../components/Resize/Resize";
 import "./inbox.scss"
 import {t} from 'i18next';
 import Todo from "../../components/UI/todo/Todo";
+import ResizeHandle from "../../components/UI/ResizeHandle/ResizeHandle";
+import {Panel, PanelGroup} from "react-resizable-panels";
+import PageList from "../../components/PageList/PageList";
+import {FileList} from "../../components/FileList/FileList";
+import FooterSettings from "../../components/FooterSettings/FooterSettings";
+import {Outlet} from "react-router-dom";
 
 const initialData: todoType[] = [
     {
@@ -92,75 +98,60 @@ const Inbox = () => {
     };
 
 
-    const minWidthPane = 100;
-    const maxWidthPane = window.innerWidth - minWidthPane;
-
-    const useResizeInbox = (minWidth: number) => {
-        const sectionRef = useRef<HTMLDivElement | null>(null);
-
-        useEffect(() => {
-            const handleResize = () => {
-                const maxWidth = window.innerWidth - minWidth;
-                if (sectionRef.current) {
-                    sectionRef.current.style.maxWidth = `${maxWidth}px`;
-                }
-            };
-
-            window.addEventListener("resize", handleResize);
-            handleResize();
-
-            return () => {
-                window.removeEventListener("resize", handleResize);
-            };
-        }, [minWidth]);
-
-        return sectionRef;
-    };
-
-    const sectionRef = useResizeInbox(minWidthPane);
-
     return (
-        <div className="container_inbox">
-            <div className="left_container">
-                <h1>Inbox</h1>
-                <div className="wrapper_left_container">
-                    <div>{t('sort')}</div>
-                    <div>...</div>
-                </div>
-                <input
-                    type="text"
-                    placeholder="Нове завдання"
-                    value={newTask}
-                    onChange={handleNewTaskChange}
-                />
-                <button onClick={addTask}>Додати завдання</button>
-                <div>
-                    {tasks.map((task: any) => (
-                        <Todo
-                            task={task}
-                            toggleComplete={toggleComplete}
-                            handleTaskClick={handleTaskClick}
-                        />
-                    ))}
-                </div>
-            </div>
-            <Resize sectionRef={sectionRef} minWidthPane2={100}/>
-            {selectedTask && (
-                <div className="right_container"
-                >
-                    <h2>{selectedTask.title}</h2>
-                    <p>{selectedTask.text}</p>
-                    <div>
-                        {selectedTask.subTodo.map((subTask: any) => (
-                            <Todo
-                                task={subTask}
-                                toggleComplete={toggleComplete}
-                                handleTaskClick={handleTaskClick}
+        <div className="container_inbox container_resize">
+            <PanelGroup direction="horizontal">
+                <Panel className="Panel" defaultSize={20} order={1}>
+                    <div className="PanelContent">
+                        <div className="left_container">
+                            <h1>Inbox</h1>
+                            <div className="wrapper_left_container">
+                                <div>{t('sort')}</div>
+                                <div>...</div>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Нове завдання"
+                                value={newTask}
+                                onChange={handleNewTaskChange}
                             />
-                        ))}
+                            <button onClick={addTask}>Додати завдання</button>
+                            <div>
+                                {tasks.map((task: any) => (
+                                    <Todo
+                                        task={task}
+                                        toggleComplete={toggleComplete}
+                                        handleTaskClick={handleTaskClick}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            )}
+                </Panel>
+                {selectedTask && (
+                    <>
+                        <ResizeHandle/>
+                        <Panel className="Panel" order={12}>
+                            <div className="PanelContent">
+                                <div className="right_container"
+                                >
+                                    <h2>{selectedTask.title}</h2>
+                                    <p>{selectedTask.text}</p>
+                                    <div>
+                                        {selectedTask.subTodo.map((subTask: any) => (
+                                            <Todo
+                                                task={subTask}
+                                                toggleComplete={toggleComplete}
+                                                handleTaskClick={handleTaskClick}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </Panel>
+                    </>
+                )}
+            </PanelGroup>
         </div>
     );
 };
