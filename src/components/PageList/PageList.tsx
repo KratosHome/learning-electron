@@ -20,7 +20,7 @@ const PageList = () => {
                     <Link to="/todo">{t('todo')}</Link>
                 </li>
                 <li>
-                    <Link to="/upcoming">{t('upcoming')}</Link>
+                    <Link to="/upcoming">{t('upcoming')}ацкуаукауцкацукацука</Link>
                 </li>
             </ul>
         </>

@@ -103,7 +103,7 @@ background: rgb(24, 24, 38); ховер бутом блок
 body {
   background-color: var(--background);
   color: var(--color-text);
-  font-size:calc(var(--index) * .85);
+  font-size: calc(var(--index) * .85);
   line-height: calc(var(--index) * .8);
   font-family: 'AbhayaLibre', sans-serif;
   font-weight: 400;
@@ -163,5 +163,6 @@ button {
   .left-container {
     margin-top: calc(var(--index) * .5);
     position: relative;
+    overflow: auto;
   }
 }

@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {todoType} from "../../types/todoType";
 import Resize from "../../components/Resize/Resize";
 import "./inbox.scss"
+import {t} from 'i18next';
+import Todo from "../../components/UI/todo/Todo";
 
 const initialData: todoType[] = [
     {
@@ -38,7 +40,6 @@ const Inbox = () => {
     const [newTask, setNewTask] = useState("");
     const [tasks, setTasks] = useState(initialData);
     const [selectedTask, setSelectedTask] = useState<todoType | null>(null);
-    const sectionRef = useRef<HTMLDivElement | null>(null);
 
     const handleNewTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewTask(event.target.value);
@@ -49,9 +50,9 @@ const Inbox = () => {
         if (newTask.trim()) {
             const newTodo: todoType = {
                 id: Date.now(),
-                date: new Date().toISOString(),
-                timeStart: new Date().toISOString(),
-                timeEnd: new Date().toISOString(),
+                date: null,
+                timeStart: null,
+                timeEnd: null,
                 timer: 0,
                 title: newTask,
                 text: newTask,
@@ -81,16 +82,49 @@ const Inbox = () => {
     }, [newTask, tasks]);
 
 
-    const handleTaskClick = (task: todoType) => {
+    const handleTaskClick = (event: React.MouseEvent, task: todoType) => {
+        event.stopPropagation();
         setSelectedTask(task);
     };
+
+    const toggleComplete = (id: number) => {
+        setTasks(tasks.map(task => task.id === id ? {...task, completed: !task.completed} : task));
+    };
+
+
+    const minWidthPane = 100;
+    const maxWidthPane = window.innerWidth - minWidthPane;
+
+    const useResizeInbox = (minWidth: number) => {
+        const sectionRef = useRef<HTMLDivElement | null>(null);
+
+        useEffect(() => {
+            const handleResize = () => {
+                const maxWidth = window.innerWidth - minWidth;
+                if (sectionRef.current) {
+                    sectionRef.current.style.maxWidth = `${maxWidth}px`;
+                }
+            };
+
+            window.addEventListener("resize", handleResize);
+            handleResize();
+
+            return () => {
+                window.removeEventListener("resize", handleResize);
+            };
+        }, [minWidth]);
+
+        return sectionRef;
+    };
+
+    const sectionRef = useResizeInbox(minWidthPane);
 
     return (
         <div className="container_inbox">
             <div className="left_container">
-                <div>
-                    <h1>Inbox</h1>
-                    <div>sort</div>
+                <h1>Inbox</h1>
+                <div className="wrapper_left_container">
+                    <div>{t('sort')}</div>
                     <div>...</div>
                 </div>
                 <input
@@ -102,20 +136,27 @@ const Inbox = () => {
                 <button onClick={addTask}>Додати завдання</button>
                 <div>
                     {tasks.map((task: any) => (
-                        <div key={task.id} onClick={() => handleTaskClick(task)}>
-                            {task.title}
-                        </div>
+                        <Todo
+                            task={task}
+                            toggleComplete={toggleComplete}
+                            handleTaskClick={handleTaskClick}
+                        />
                     ))}
                 </div>
             </div>
-            <Resize sectionRef={sectionRef} minWidthPane2={1500}/>
+            <Resize sectionRef={sectionRef} minWidthPane2={100}/>
             {selectedTask && (
-                <div className="right_container">
+                <div className="right_container"
+                >
                     <h2>{selectedTask.title}</h2>
                     <p>{selectedTask.text}</p>
                     <div>
                         {selectedTask.subTodo.map((subTask: any) => (
-                            <div key={subTask.id}>{subTask.title}</div>
+                            <Todo
+                                task={subTask}
+                                toggleComplete={toggleComplete}
+                                handleTaskClick={handleTaskClick}
+                            />
                         ))}
                     </div>
                 </div>

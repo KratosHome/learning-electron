@@ -24,10 +24,10 @@ function App() {
 
 
     const sectionRef = useRef<HTMLDivElement | null>(null);
-    const minWidthPane1 = 100;
-    const minWidthPane2 = 500;
-    const maxWidthPane2 = window.innerWidth - minWidthPane1;
+    const minWidthPane = 100;
+    const maxWidthPane = window.innerWidth - minWidthPane;
 
+    console.log(maxWidthPane)
 
     return (
         <div className="container-app">
@@ -36,10 +36,10 @@ function App() {
                 <FileList/>
                 <FooterSettings/>
             </div>
-            <Resize sectionRef={sectionRef} minWidthPane2={minWidthPane2}/>
+            <Resize sectionRef={sectionRef} minWidthPane2={100}/>
             <div
                 className="right-container row"
-                style={{minWidth: `${minWidthPane2}px`, maxWidth: `${maxWidthPane2}px`}}
+                style={{minWidth: `${minWidthPane}px`, maxWidth: `${maxWidthPane}px`}}
             >
                 <Outlet/>
             </div>

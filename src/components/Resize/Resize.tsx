@@ -1,4 +1,3 @@
-// components/Resize/Resize.tsx
 import React, { FC, useEffect, useRef, useState } from 'react';
 import "./resize.scss"
 

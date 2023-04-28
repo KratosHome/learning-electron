@@ -3,13 +3,22 @@
   width: 100vw;
   height: 100vh;
   position: fixed;
+  overflow: hidden;
+
+  .left_container {
+    position: relative;
+    overflow: auto;
+    flex-shrink: 0;
+
+    .wrapper_left_container {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
 
   .right_container {
     flex-grow: 1;
     overflow: auto;
-
-  }
-  .left_container{
-    position: relative;
+    min-width: 100px;
   }
 }

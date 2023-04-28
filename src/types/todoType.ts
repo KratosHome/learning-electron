@@ -1,8 +1,8 @@
 export interface todoType {
     id: number;
-    date: string;
-    timeStart: string;
-    timeEnd: string;
+    date: string | null;
+    timeStart: string | null;
+    timeEnd: string | null;
     timer: number;
     title: string;
     text: string;
@@ -15,9 +15,9 @@ export interface todoType {
 
 interface SubTask {
     id: number;
-    date: string;
-    timeStart: string;
-    timeEnd: string;
+    date: string | null;
+    timeStart: string | null;
+    timeEnd: string | null;
     timer: number;
     title: string;
     text: string;
