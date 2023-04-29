@@ -38,7 +38,7 @@ function App() {
                 <Panel className="Panel" order={2}>
                     <div className="PanelContent">
                         <div className="right-container row">
-                            <Outlet/>
+                            <Outlet />
                         </div>
                     </div>
                 </Panel>

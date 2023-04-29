@@ -155,7 +155,6 @@ button {
   position: fixed;
 
   .right-container {
-    margin-top: calc(var(--index) * .5);
     flex-grow: 1;
     overflow: auto;
   }

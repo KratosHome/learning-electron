@@ -1,15 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {todoType} from "../../types/todoType";
-import Resize from "../../components/Resize/Resize";
 import "./inbox.scss"
 import {t} from 'i18next';
 import Todo from "../../components/UI/todo/Todo";
 import ResizeHandle from "../../components/UI/ResizeHandle/ResizeHandle";
 import {Panel, PanelGroup} from "react-resizable-panels";
-import PageList from "../../components/PageList/PageList";
-import {FileList} from "../../components/FileList/FileList";
-import FooterSettings from "../../components/FooterSettings/FooterSettings";
-import {Outlet} from "react-router-dom";
 
 const initialData: todoType[] = [
     {
@@ -18,7 +13,7 @@ const initialData: todoType[] = [
         "timeStart": "2023-04-07T21:00:00.000Z",
         "timeEnd": "2023-04-07T21:00:00.000Z",
         "timer": 1,
-        "title": "New todo",
+        "title": "Навчання",
         "text": "New todo",
         "pathMD": "New todo",
         "completed": false,
@@ -31,13 +26,26 @@ const initialData: todoType[] = [
                 "timeStart": "2023-04-07T21:00:00.000Z",
                 "timeEnd": "2023-04-07T21:00:00.000Z",
                 "timer": 1,
-                "title": "іги ещвщ",
+                "title": "Англійська",
                 "text": "New todo",
                 "pathMD": "New todo",
                 "completed": false,
                 "notifications": true,
                 "delete": false,
-            }
+            },
+            {
+                id: 2,
+                "date": "2023-04-07T21:00:00.000Z",
+                "timeStart": "2023-04-07T21:00:00.000Z",
+                "timeEnd": "2023-04-07T21:00:00.000Z",
+                "timer": 1,
+                "title": "програмування",
+                "text": "New todo",
+                "pathMD": "New todo",
+                "completed": false,
+                "notifications": true,
+                "delete": false,
+            },
         ]
     }
 ]
@@ -88,8 +96,7 @@ const Inbox = () => {
     }, [newTask, tasks]);
 
 
-    const handleTaskClick = (event: React.MouseEvent, task: todoType) => {
-        event.stopPropagation();
+    const handleTaskClick = (event: React.MouseEvent, task: todoType, id?: number, isSub?: boolean) => {
         setSelectedTask(task);
     };
 
@@ -97,6 +104,17 @@ const Inbox = () => {
         setTasks(tasks.map(task => task.id === id ? {...task, completed: !task.completed} : task));
     };
 
+
+    const toggleSubComplete = (id: number) => {
+        setTasks(tasks.map(task => {
+            return {...task,
+                subTodo: task.subTodo.map(subTask => subTask.id === id ? {
+                    ...subTask,
+                    completed: !subTask.completed
+                } : subTask)
+            };
+        }));
+    };
 
     return (
         <div className="container_inbox container_resize">
@@ -119,6 +137,7 @@ const Inbox = () => {
                             <div>
                                 {tasks.map((task: any) => (
                                     <Todo
+                                        key={task.id}
                                         task={task}
                                         toggleComplete={toggleComplete}
                                         handleTaskClick={handleTaskClick}
@@ -140,9 +159,11 @@ const Inbox = () => {
                                     <div>
                                         {selectedTask.subTodo.map((subTask: any) => (
                                             <Todo
+                                                key={subTask.id}
                                                 task={subTask}
-                                                toggleComplete={toggleComplete}
+                                                toggleComplete={toggleSubComplete}
                                                 handleTaskClick={handleTaskClick}
+                                                isSub={true}
                                             />
                                         ))}
                                     </div>
