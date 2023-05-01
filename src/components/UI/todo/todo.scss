@@ -1,12 +1,14 @@
 .container_todo {
   display: flex;
+  justify-content: center;
+  align-items: flex-end;
 
   .title_todo {
     margin-top: calc(var(--index) * .9);
     margin-left: calc(var(--index) * .9);
-    padding-right: 435px;
-    background-color: red;
+    width: calc(var(--index) * 19);
   }
+
   .title_todo.completed {
     text-decoration: line-through;
   }

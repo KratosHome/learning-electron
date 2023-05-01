@@ -1,13 +1,9 @@
 import React, {FC} from 'react';
+import {todoType} from "../../../types/todoType";
 
-interface Todo {
-    id: number;
-    date: Date;
-    text: string;
-}
 
 interface TodoItemProps {
-    todo: Todo;
+    todo: todoType;
     handleDragStart: (e: React.DragEvent<HTMLDivElement>, todoId: number) => void;
 }
 

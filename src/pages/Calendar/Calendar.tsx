@@ -87,6 +87,7 @@ const Calendar: React.FC = () => {
                     >
                         {todos
                             .filter((todo) => {
+                                if (!todo.date) return false;
                                 const todoDate = new Date(todo.date);
                                 return (
                                     todoDate.getDate() === day.getDate() &&

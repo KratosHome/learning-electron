@@ -2,6 +2,9 @@ import React, {FC} from 'react';
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import "./todo.scss"
 import {todoType} from "../../../types/todoType";
+import DeleteButton from "../DeleteButton/DeleteButton";
+import {useDispatch} from 'react-redux';
+import { deleteTodo} from '../../../store/todoSlice';
 
 type TaskProps = {
     task: todoType;
@@ -11,7 +14,7 @@ type TaskProps = {
 };
 
 const Todo: FC<TaskProps> = ({task, toggleComplete, handleTaskClick, isSub}) => {
-
+    const dispatch = useDispatch();
     const handleClick = (event: React.MouseEvent) => {
         if (!isSub) {
             handleTaskClick(event, task);
@@ -26,6 +29,11 @@ const Todo: FC<TaskProps> = ({task, toggleComplete, handleTaskClick, isSub}) => 
         }
     };
 
+    const handleComplete = () => {
+        dispatch(deleteTodo({id: task.id}));
+    };
+
+
     return (
         <div className="container_todo">
             <CustomCheckbox
@@ -38,6 +46,7 @@ const Todo: FC<TaskProps> = ({task, toggleComplete, handleTaskClick, isSub}) => 
             >
             {task.title}
         </span>
+            <DeleteButton handleComplete={handleComplete}/>
         </div>
     );
 };

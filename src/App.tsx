@@ -14,9 +14,9 @@ function App() {
     useEffect(() => {
         async function fetchTodos() {
             const todos = await window.storeAPI.getValue('todos');
-            if (todos) {
-                dispatch(initTodos(todos));
-            }
+            const todosComplete = await window.storeAPI.getValue('todosComplete')
+            const todosDelete = await window.storeAPI.getValue('todosDelete')
+            dispatch(initTodos({todos, todosComplete, todosDelete}));
         }
 
         fetchTodos();
@@ -38,7 +38,7 @@ function App() {
                 <Panel className="Panel" order={2}>
                     <div className="PanelContent">
                         <div className="right-container row">
-                            <Outlet />
+                            <Outlet/>
                         </div>
                     </div>
                 </Panel>

@@ -1,0 +1,12 @@
+.container_delete_button {
+
+  cursor: pointer;
+
+   svg{
+     height: calc(var(--index) * 1);
+     width: calc(var(--index) * 1);
+     path {
+       fill: var(--color-link);
+     }
+   }
+}

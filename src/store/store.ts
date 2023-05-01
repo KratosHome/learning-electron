@@ -6,9 +6,12 @@ const electronStoreMiddleware: ThunkMiddleware = (storeApi) => (next) => async (
     const result = next(action);
     const state = storeApi.getState();
     await window.storeAPI.setValue('todos', state.todo.todos);
+    await window.storeAPI.setValue('todosComplete', state.todo.todosComplete); // Додайте цей рядок
+    await window.storeAPI.setValue('todosDelete', state.todo.todosDelete); // Додайте цей рядок
     await window.storeAPI.setValue('files', state.files.files.patch);
     return result;
 };
+
 
 export const store = configureStore({
     reducer: {
