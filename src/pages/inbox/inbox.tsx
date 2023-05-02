@@ -1,40 +1,34 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {todoType} from "../../types/todoType";
 import "./inbox.scss"
 import Todo from "../../components/UI/todo/Todo";
 import ResizeHandle from "../../components/UI/ResizeHandle/ResizeHandle";
 import {Panel, PanelGroup} from "react-resizable-panels";
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../store/store';
 import AddTodo from "../../components/AddTodo/AddTodo";
 import SortTodos from '../../components/SortTodos/SortTodos';
+import {setSelectedTask} from '../../store/todoSlice';
 
 const Inbox = () => {
+    const dispatch = useDispatch();
+    const {todos, todosComplete, todosDelete, selectedTask} = useSelector((state: RootState) => state.todo);
 
-    const [selectedTask, setSelectedTask] = useState<todoType | null>(null);
-    const {todos, todosComplete, todosDelete} = useSelector((state: RootState) => state.todo);
-
-    const handleTaskClick = (event: React.MouseEvent, task: todoType,) => {
-        setSelectedTask(task);
+    const handleTaskClick = (event: React.MouseEvent, task: todoType) => {
+        dispatch(setSelectedTask(task));
     };
 
-    const toggleComplete = (id: number) => {
-        //   setTasks(todos.map(task => task.id === id ? {...task, completed: !task.completed} : task));
-    };
-
-
-    const toggleSubComplete = (id: number) => {
-        /*
-                setTasks(todos.map(task => {
-                    return {...task,
-                        subTodo: task.subTodo.map(subTask => subTask.id === id ? {
-                            ...subTask,
-                            completed: !subTask.completed
-                        } : subTask)
-                    };
-                }));
-         */
-    };
+    const closeRightContainer = () => {
+        dispatch(setSelectedTask(null));
+    }
+    useEffect(() => {
+        if (selectedTask) {
+            const updatedTask = todos.find((todo) => todo.id === selectedTask.id);
+            if (updatedTask) {
+                dispatch(setSelectedTask(updatedTask));
+            }
+        }
+    }, [todos, selectedTask, dispatch]);
 
     return (
         <div className="container_inbox container_resize">
@@ -49,7 +43,6 @@ const Inbox = () => {
                                 <Todo
                                     key={task.id}
                                     task={task}
-                                    toggleComplete={toggleComplete}
                                     handleTaskClick={handleTaskClick}
                                 />
                             ))}
@@ -58,8 +51,8 @@ const Inbox = () => {
                                 <Todo
                                     key={task.id}
                                     task={task}
-                                    toggleComplete={toggleComplete}
                                     handleTaskClick={handleTaskClick}
+                                    isComplete={true}
                                 />
                             ))}
                             <div>Видалені</div>
@@ -67,8 +60,8 @@ const Inbox = () => {
                                 <Todo
                                     key={task.id}
                                     task={task}
-                                    toggleComplete={toggleComplete}
                                     handleTaskClick={handleTaskClick}
+                                    isDelete={true}
                                 />
                             ))}
                         </div>
@@ -81,17 +74,23 @@ const Inbox = () => {
                             <div className="PanelContent">
                                 <div className="right_container"
                                 >
+                                    <AddTodo
+                                        todoId={selectedTask.id}
+                                        isSub={true}
+                                    />
                                     <h2>{selectedTask.title}</h2>
                                     <div>
                                         {selectedTask.subTodo.map((subTask: any) => (
                                             <Todo
                                                 key={subTask.id}
                                                 task={subTask}
-                                                toggleComplete={toggleSubComplete}
                                                 handleTaskClick={handleTaskClick}
                                                 isSub={true}
                                             />
                                         ))}
+                                    </div>
+                                    <div onClick={closeRightContainer}>
+                                        close
                                     </div>
                                 </div>
                             </div>

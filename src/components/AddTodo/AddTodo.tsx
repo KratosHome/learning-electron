@@ -1,11 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {todoType} from "../../types/todoType";
-import {addTodo} from "../../store/todoSlice";
+import {addSubTodo, addTodo, setSelectedTask} from "../../store/todoSlice";
 import {useDispatch} from "react-redux";
 
-const AddTodo = () => {
-    const dispatch = useDispatch(); // Додайте цей рядок
+type AddTodoType = {
+    isSub?: boolean
+    todoId?: number
+}
 
+
+const AddTodo: FC<AddTodoType> = ({isSub, todoId}) => {
+    const dispatch = useDispatch(); // Додайте цей рядок
     const [newTask, setNewTask] = useState("");
     const handleNewTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewTask(event.target.value);
@@ -26,10 +31,15 @@ const AddTodo = () => {
                 delete: false,
                 subTodo: [],
             };
-            dispatch(addTodo(newTodo));
+            if (isSub && todoId) {
+                dispatch(addSubTodo({todoId, subTodo: newTodo}));
+            } else {
+                dispatch(addTodo(newTodo));
+            }
             setNewTask("");
         }
     };
+
 
 
     useEffect(() => {
