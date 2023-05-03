@@ -4,7 +4,7 @@ import "./todo.scss"
 import {todoType} from "../../../types/todoType";
 import DeleteButton from "../DeleteButton/DeleteButton";
 import {useDispatch} from 'react-redux';
-import {deleteTodo, setSelectedTask} from '../../../store/todoSlice';
+import {completeTodo, deleteTodo, removeTodo, setSelectedTask, uncompletedTodo} from '../../../store/todoSlice';
 
 type TaskProps = {
     task: todoType;
@@ -25,11 +25,19 @@ const Todo: FC<TaskProps> = ({task, handleTaskClick, isSub, isComplete, isDelete
     };
 
     const handleCheckboxChange = () => {
-
+        if (isComplete) {
+            dispatch(uncompletedTodo({id: task.id}));
+        } else {
+            dispatch(completeTodo({id: task.id}));
+        }
     };
 
     const handleDeleteTodo = () => {
-        dispatch(deleteTodo({id: task.id}));
+        if (isDelete || isComplete) {
+            dispatch(removeTodo({id: task.id}));
+        } else {
+            dispatch(deleteTodo({id: task.id}));
+        }
     };
 
 
@@ -38,6 +46,7 @@ const Todo: FC<TaskProps> = ({task, handleTaskClick, isSub, isComplete, isDelete
             <CustomCheckbox
                 id={task.id.toString()}
                 onCheckboxChange={handleCheckboxChange}
+                checked={task.completed}
             />
             <span
                 onClick={handleClick}

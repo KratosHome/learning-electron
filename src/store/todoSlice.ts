@@ -74,12 +74,8 @@ const todoSlice = createSlice({
             }
         },
         removeTodo: (state, action) => {
-            const todoToComplete = state.todos.find(
-                (todo) => todo.id === action.payload.id
-            );
-            if (todoToComplete) {
-                state.todosDelete = state.todos.filter((todo) => todo.id !== action.payload.id);
-            }
+            state.todosDelete = state.todosDelete.filter((todo) => todo.id !== action.payload.id);
+            state.todosComplete = state.todosDelete.filter((todo) => todo.id !== action.payload.id);
         },
     },
 });
