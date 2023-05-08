@@ -7,5 +7,8 @@
   "upcoming": "upcoming",
   "apply": "apply",
   "font-size": "font size",
-  "sort": "sort"
+  "sort": "sort",
+  "new_task": "new task",
+  "addTask": "add task",
+  "new_folder": "new folder"
 }

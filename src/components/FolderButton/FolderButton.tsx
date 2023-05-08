@@ -1,6 +1,8 @@
 import React, {FC, useCallback, useState} from 'react';
 import {setFilePath} from "../../store/fileSlice";
 import {useDispatch} from "react-redux";
+import MayInput from "../UI/MayInput/MayInput";
+import {useTranslation} from "react-i18next";
 
 type FolderButtonType = {
     filePath: any
@@ -11,6 +13,7 @@ type FolderButtonType = {
 const FolderButton: FC<FolderButtonType> = ({filePath, items, setItems}) => {
     const [folderName, setFolderName] = useState("");
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const openFolderDialog = async () => {
         const directoryPath = await window.electron.invoke("open-folder-dialog");
@@ -44,11 +47,10 @@ const FolderButton: FC<FolderButtonType> = ({filePath, items, setItems}) => {
     return (
         <>
             <button onClick={openFolderDialog}>Вибрати папку</button>
-            <input
-                type="text"
-                placeholder="Назва папки"
+            <MayInput
+                translate={`${t('new_folder')}`}
                 value={folderName}
-                onChange={(e) => setFolderName(e.target.value)}
+                onChange={(e: any) => setFolderName(e.target.value)}
             />
             <button onClick={createFolder}>Створити нову папку</button>
         </>

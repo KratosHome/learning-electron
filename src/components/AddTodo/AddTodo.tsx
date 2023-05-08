@@ -1,7 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
 import {todoType} from "../../types/todoType";
-import {addSubTodo, addTodo, setSelectedTask} from "../../store/todoSlice";
+import {addSubTodo, addTodo} from "../../store/todoSlice";
 import {useDispatch} from "react-redux";
+import "./AddTodo.scss"
+import MayInput from "../UI/MayInput/MayInput";
+import {useTranslation} from "react-i18next";
 
 type AddTodoType = {
     isSub?: boolean
@@ -11,6 +14,7 @@ type AddTodoType = {
 
 const AddTodo: FC<AddTodoType> = ({isSub, todoId}) => {
     const dispatch = useDispatch(); // Додайте цей рядок
+    const {t} = useTranslation();
     const [newTask, setNewTask] = useState("");
     const handleNewTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewTask(event.target.value);
@@ -56,14 +60,13 @@ const AddTodo: FC<AddTodoType> = ({isSub, todoId}) => {
     }, [newTask]);
 
     return (
-        <div>
-            <input
-                type="text"
-                placeholder="Нове завдання"
+        <div className="container_add_todo">
+            <MayInput
+                translate={`${t('new_task')}`}
                 value={newTask}
                 onChange={handleNewTaskChange}
             />
-            <button onClick={addTask}>Додати завдання</button>
+            <button onClick={addTask}>{t('addTask')}</button>
         </div>
     );
 };

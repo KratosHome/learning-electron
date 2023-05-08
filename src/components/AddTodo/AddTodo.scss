@@ -1,0 +1,5 @@
+.container_add_todo {
+  button {
+    margin-left: calc(var(--index) * .5);
+  }
+}
